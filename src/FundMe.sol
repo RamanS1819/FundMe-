@@ -117,3 +117,5 @@ contract FundMe {
 
 // load word from memory and save word to memory cost minimum of 3 gas each
 // while load word from memory and save word to storage cost minimum of 100 gas each
+
+// Makefiles allow us to create shortcuts for commands we are going to commonly use
