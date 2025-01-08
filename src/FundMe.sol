@@ -9,8 +9,9 @@ error FundMe__NotOwner();
 
 contract FundMe {
     using PriceConverter for uint256;
-    // constants, immutable variables do not take spot in storage 
+    // constants, immutable variables do not take spot in storage
     // constant variables are part of contract bytecode itself
+
     mapping(address => uint256) private s_addressToAmountFunded;
     address[] private s_funders;
 
@@ -43,14 +44,12 @@ contract FundMe {
 
     function cheaperWithdraw() public onlyOwner {
         uint256 fundersLength = s_funders.length;
-        for(uint256 funderIndex = 0; funderIndex < fundersLength; funderIndex++) {
+        for (uint256 funderIndex = 0; funderIndex < fundersLength; funderIndex++) {
             address funder = s_funders[funderIndex];
             s_addressToAmountFunded[funder] = 0;
         }
         s_funders = new address[](0);
-        (bool callSuccess,) = payable(msg.sender).call{
-            value: address(this).balance
-        }("");
+        (bool callSuccess,) = payable(msg.sender).call{value: address(this).balance}("");
         require(callSuccess, "Call failed");
     }
 
@@ -94,9 +93,7 @@ contract FundMe {
     /**
      * view/ pure functions (getters)
      */
-    function getAddressToAmountFunded(
-        address fundingAddress
-    ) external view returns (uint256) {
+    function getAddressToAmountFunded(address fundingAddress) external view returns (uint256) {
         return s_addressToAmountFunded[fundingAddress];
     }
 
@@ -117,8 +114,6 @@ contract FundMe {
 // 5. abi.encode / decode
 // 6. Hash with keccak256
 // 7. Yul / Assembly
-
-
 
 // load word from memory and save word to memory cost minimum of 3 gas each
 // while load word from memory and save word to storage cost minimum of 100 gas each
