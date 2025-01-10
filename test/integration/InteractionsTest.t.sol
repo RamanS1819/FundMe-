@@ -7,28 +7,27 @@ import {DeployFundMe} from "../../script/DeployFundMe.s.sol";
 import {FundFundMe, WithdrawFundMe} from "../../script/Interaction.s.sol";
 
 contract InteractionsTest is Test {
+    FundMe fundMe;
 
-      FundMe fundMe;
+    address USER = makeAddr("user");
+    uint256 constant SEND_VALUE = 0.1 ether; // 100000000000000000 wei
+    uint256 constant STARTING_BALANCE = 10 ether;
+    uint256 constant GAS_PRICE = 1;
 
-      address USER = makeAddr("user");
-      uint256 constant SEND_VALUE = 0.1 ether; // 100000000000000000 wei
-      uint256 constant STARTING_BALANCE = 10 ether;
-      uint256 constant GAS_PRICE = 1;
-
-      function setUp() external {
+    function setUp() external {
         // fundMe = new FundMe(0x694AA1769357215DE4FAC081bf1f309aDC325306);
         DeployFundMe deployFundMe = new DeployFundMe();
         fundMe = deployFundMe.run();
         vm.deal(USER, STARTING_BALANCE);
-      }
+    }
 
-      function testUserCanFundInteractions() public {
-            FundFundMe fundFundMe = new FundFundMe();
-            fundFundMe.fundFundMe(address(fundMe));
+    function testUserCanFundInteractions() public {
+        FundFundMe fundFundMe = new FundFundMe();
+        fundFundMe.fundFundMe(address(fundMe));
 
-            WithdrawFundMe withdrawFundMe = new WithdrawFundMe();
-            withdrawFundMe.withdrawFundMe(address(fundMe));
+        WithdrawFundMe withdrawFundMe = new WithdrawFundMe();
+        withdrawFundMe.withdrawFundMe(address(fundMe));
 
-            assert(address(fundMe).balance == 0);
-      }
+        assert(address(fundMe).balance == 0);
+    }
 }
